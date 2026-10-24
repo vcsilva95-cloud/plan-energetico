@@ -33,7 +33,7 @@ st.sidebar.metric(
 st.sidebar.subheader("Usinas Hidrelétricas")
 for uhe in sistema["UHE"]:
     st.sidebar.markdown(f"**{uhe['Nome'].replace('UHE ', 'UHE ').title()}**")
-    st.sidebar.write(f"Produtibilidade (Ï): {uhe['Prod']:.3f} MWmed/hm³")
+    st.sidebar.write(f"Produtibilidade (ρ): {uhe['Prod']:.3f} MWmed/hm³")
     st.sidebar.write(f"Volume máximo: {uhe['Vmax']:,.0f} hm³".replace(",", "."))
     st.sidebar.write(f"Volume mínimo: {uhe['Vmin']:,.0f} hm³".replace(",", "."))
     st.sidebar.write(f"Volume Útil: {uhe['Vmax'] - uhe['Vmin']:,.0f} hm³".replace(",", "."))
