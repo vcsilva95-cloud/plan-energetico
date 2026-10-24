@@ -263,4 +263,4 @@ def pl_unico(sistema,cenario, imprime):
   return(resultado)
 
 if __name__ == "__main__":
-    resultado = pl_unico(sistema, 0, True)
+    resultado = pl_unico(sistema_simulacao,cenario,False)
