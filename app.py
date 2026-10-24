@@ -35,13 +35,13 @@ for uhe in sistema["UHE"]:
     st.sidebar.markdown(f"**{uhe['Nome'].replace('UHE ', 'UHE ').title()}**")
     st.sidebar.write(f"Produtibilidade (Ï): {uhe['Prod']:.3f} MWmed/hmÂ³")
     st.sidebar.write(f"Volume máximo: {uhe['Vmax']:,.0f} hmÂ³".replace(",", "."))
-    st.sidebar.write(f"Volume mÃ­nimo: {uhe['Vmin']:,.0f} hmÂ³".replace(",", "."))
-    st.sidebar.write(f"Volume Ãºtil: {uhe['Vmax'] - uhe['Vmin']:,.0f} hmÂ³".replace(",", "."))
+    st.sidebar.write(f"Volume mínimo: {uhe['Vmin']:,.0f} hmÂ³".replace(",", "."))
+    st.sidebar.write(f"Volume Útil: {uhe['Vmax'] - uhe['Vmin']:,.0f} hmÂ³".replace(",", "."))
 
 st.sidebar.subheader("ðŸ”¥ Usinas TermelÃ©tricas")
 for ute in sistema["UTE"]:
     st.sidebar.markdown(f"**{ute['Nome'].replace('_', ' ')}**")
-    st.sidebar.write(f"PotÃªncia mÃ¡xima: {ute['Capac']:.0f} MW")
+    st.sidebar.write(f"Potência máxima: {ute['Capac']:.0f} MW")
     st.sidebar.write(f"CVU: R$ {ute['Custo']:,.0f} / MWmÃªs".replace(",", "."))
 
 st.sidebar.divider()
@@ -146,8 +146,8 @@ for y, nome, cor in [
     (gh_chavantes, "UHE Chavantes", "#1565C0"),
     (gh_piraju, "UHE Piraju", "#42A5F5"),
     (gt_termobahia, "UTE Termobahia", "#FF9800"),
-    (gt_pecem, "UTE PecÃ©m II", "#E53935"),
-    (deficit, "DÃ©ficit", "#9E9E9E"),
+    (gt_pecem, "UTE Pecém II", "#E53935"),
+    (deficit, "Déficit", "#9E9E9E"),
 ]:
     fig_despacho.add_trace(go.Bar(x=estagios, y=y, name=nome, marker_color=cor))
 fig_despacho.add_trace(go.Scatter(
@@ -156,9 +156,9 @@ fig_despacho.add_trace(go.Scatter(
     marker=dict(size=7, color="black")
 ))
 fig_despacho.update_layout(
-    title="Despacho de Geração por Estágio", xaxis_title="EstÃ¡gio",
-    yaxis_title="GeraÃ§Ã£o (MWmed)", barmode="stack",
-    legend_title="Fonte de geraÃ§Ã£o", hovermode="x unified"
+    title="Despacho de Geração por Estágio", xaxis_title="Estágio",
+    yaxis_title="Geração (MWmed)", barmode="stack",
+    legend_title="Fonte de geração", hovermode="x unified"
 )
 fig_despacho.update_xaxes(tickmode="linear", dtick=1)
 st.plotly_chart(fig_despacho, use_container_width=True)
@@ -187,7 +187,7 @@ st.plotly_chart(fig_armazenamento, use_container_width=True)
 
 # 3) CUSTO DE OPERAÃ‡ÃƒO
 st.divider()
-st.subheader("ðŸ’° Custo de Operação por Estágio")
+st.subheader("Custo de Operação por Estágio")
 cvu_termobahia = sistema["UTE"][0]["Custo"]
 cvu_pecem = sistema["UTE"][1]["Custo"]
 custo_deficit = sistema["DGer"]["CDef"]
@@ -201,10 +201,10 @@ custo_estagio = [
 custo_total_operacao = sum(custo_estagio)
 fig_custo = go.Figure()
 fig_custo.add_trace(go.Bar(x=estagios, y=custo_termobahia, name="UTE Termobahia", marker_color="#FF9800"))
-fig_custo.add_trace(go.Bar(x=estagios, y=custo_pecem, name="UTE PecÃ©m II", marker_color="#E53935"))
-fig_custo.add_trace(go.Bar(x=estagios, y=custo_deficit_estagio, name="DÃ©ficit", marker_color="#9E9E9E"))
+fig_custo.add_trace(go.Bar(x=estagios, y=custo_pecem, name="UTE Pecém II", marker_color="#E53935"))
+fig_custo.add_trace(go.Bar(x=estagios, y=custo_deficit_estagio, name="Déficit", marker_color="#9E9E9E"))
 fig_custo.update_layout(
-    xaxis_title="EstÃ¡gio", yaxis_title="Custo (R$)", barmode="stack",
+    xaxis_title="Estágio", yaxis_title="Custo (R$)", barmode="stack",
     legend_title="Componente do custo", hovermode="x unified"
 )
 fig_custo.update_xaxes(tickmode="linear", dtick=1)
@@ -224,4 +224,4 @@ elif fator_carga > 100:
     st.warning(f"Carga aumentada em {fator_carga - 100}%")
 else:
     st.info(f"Carga reduzida em {100 - fator_carga}%")
-st.info(f"CenÃ¡rio hidrológico selecionado: **{cenario_nome}**")
+st.info(f"Cenário hidrológico selecionado: **{cenario_nome}**")
