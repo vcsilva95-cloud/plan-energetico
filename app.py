@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.graph_objects as go
+import copy
 
 from modelo import sistema, pl_unico
 
@@ -120,6 +121,25 @@ fator_carga = st.sidebar.slider(
     value=100,
     step=5
 )
+
+# --------------------------------------------------
+# APLICAÇÃO DO FATOR DE CARGA
+# --------------------------------------------------
+
+# Cria uma cópia independente do sistema original
+sistema_simulacao = copy.deepcopy(sistema)
+
+# Guarda o perfil original de carga
+carga_original = sistema["DGer"]["Carga"]
+
+# Aplica o percentual escolhido no slider
+carga_modificada = [
+    carga * fator_carga / 100
+    for carga in carga_original
+]
+
+# Envia a nova carga para a cópia usada na otimização
+sistema_simulacao["DGer"]["Carga"] = carga_modificada
 
 # --------------------------------------------------
 # EXECUÇÃO DO MODELO
