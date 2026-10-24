@@ -146,6 +146,55 @@ sistema_simulacao["DGer"]["Carga"] = carga_modificada
 resultado = pl_unico(sistema_simulacao,cenario,False)
 
 # --------------------------------------------------
+# CUSTOS POR ESTÁGIO
+# --------------------------------------------------
+
+cvu_termobahia = 424080
+cvu_pecem = 1764000
+custo_deficit = 5969520
+
+custo_termobahia = [
+    gt_termobahia[i] * cvu_termobahia
+    for i in range(12)
+]
+
+custo_pecem = [
+    gt_pecem[i] * cvu_pecem
+    for i in range(12)
+]
+
+custo_deficit_estagio = [
+    deficit[i] * custo_deficit
+    for i in range(12)
+]
+
+custo_estagio = [
+    custo_termobahia[i]
+    + custo_pecem[i]
+    + custo_deficit_estagio[i]
+    for i in range(12)
+]
+
+custo_total_operacao = sum(custo_estagio)
+
+st.metric(
+    label="💰 Custo total de operação",
+    value=f"R$ {custo_total_operacao:,.2f}"
+)
+
+custo_formatado = (
+    f"{custo_total_operacao:,.2f}"
+    .replace(",", "X")
+    .replace(".", ",")
+    .replace("X", ".")
+)
+
+st.metric(
+    label="💰 Custo total de operação",
+    value=f"R$ {custo_formatado}"
+)
+
+# --------------------------------------------------
 # RESULTADOS - DESPACHO DE GERAÇÃO
 # --------------------------------------------------
 
@@ -218,55 +267,6 @@ fig_custo.update_xaxes(
 st.plotly_chart(
     fig_custo,
     use_container_width=True
-)
-
-# --------------------------------------------------
-# CUSTOS POR ESTÁGIO
-# --------------------------------------------------
-
-cvu_termobahia = 424080
-cvu_pecem = 1764000
-custo_deficit = 5969520
-
-custo_termobahia = [
-    gt_termobahia[i] * cvu_termobahia
-    for i in range(12)
-]
-
-custo_pecem = [
-    gt_pecem[i] * cvu_pecem
-    for i in range(12)
-]
-
-custo_deficit_estagio = [
-    deficit[i] * custo_deficit
-    for i in range(12)
-]
-
-custo_estagio = [
-    custo_termobahia[i]
-    + custo_pecem[i]
-    + custo_deficit_estagio[i]
-    for i in range(12)
-]
-
-custo_total_operacao = sum(custo_estagio)
-
-st.metric(
-    label="💰 Custo total de operação",
-    value=f"R$ {custo_total_operacao:,.2f}"
-)
-
-custo_formatado = (
-    f"{custo_total_operacao:,.2f}"
-    .replace(",", "X")
-    .replace(".", ",")
-    .replace("X", ".")
-)
-
-st.metric(
-    label="💰 Custo total de operação",
-    value=f"R$ {custo_formatado}"
 )
 
 # --------------------------------------------------
