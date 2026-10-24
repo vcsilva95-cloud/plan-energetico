@@ -149,6 +149,8 @@ gh_piraju = resultado["UHE"][1]["gh"]
 gt_termobahia = resultado["UTE"][0]["gt"]
 gt_pecem = resultado["UTE"][1]["gt"]
 
+# Déficit
+deficit = resultado["Deficit"]
 
 fig_despacho = go.Figure()
 
@@ -193,6 +195,16 @@ fig_despacho.add_trace(
         y=gt_pecem,
         name="UTE Pecém II",
         marker_color="#E53935"
+    )
+)
+
+# Déficit
+fig_despacho.add_trace(
+    go.Bar(
+        x=estagios,
+        y=deficit,
+        name="Déficit",
+        marker_color="#9E9E9E"
     )
 )
 
