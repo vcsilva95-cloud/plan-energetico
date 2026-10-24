@@ -10,13 +10,13 @@ from modelo import sistema, pl_unico
 # --------------------------------------------------
 
 st.set_page_config(
-    page_title="Despacho HidrotÃ©rmico",
+    page_title="Despacho Hidrotérmico",
     page_icon="âš¡",
     layout="wide"
 )
 
-st.title("âš¡ Despacho HidrotÃ©rmico")
-st.write("Planejamento EnergÃ©tico - PL Ãšnico")
+st.title("âš¡ Despacho Hidrotérmico")
+st.write("Planejamento Energético - PL Único")
 
 
 # --------------------------------------------------
@@ -30,11 +30,11 @@ st.sidebar.metric(
     value=f"R$ {sistema['DGer']['CDef']:,.0f} / MWmÃªs".replace(",", ".")
 )
 
-st.sidebar.subheader("ðŸ’§ Usinas HidrelÃ©tricas")
+st.sidebar.subheader("ðŸ’§ Usinas Hidrelétricas")
 for uhe in sistema["UHE"]:
     st.sidebar.markdown(f"**{uhe['Nome'].replace('UHE ', 'UHE ').title()}**")
     st.sidebar.write(f"Produtibilidade (Ï): {uhe['Prod']:.3f} MWmed/hmÂ³")
-    st.sidebar.write(f"Volume mÃ¡ximo: {uhe['Vmax']:,.0f} hmÂ³".replace(",", "."))
+    st.sidebar.write(f"Volume máximo: {uhe['Vmax']:,.0f} hmÂ³".replace(",", "."))
     st.sidebar.write(f"Volume mÃ­nimo: {uhe['Vmin']:,.0f} hmÂ³".replace(",", "."))
     st.sidebar.write(f"Volume Ãºtil: {uhe['Vmax'] - uhe['Vmin']:,.0f} hmÂ³".replace(",", "."))
 
