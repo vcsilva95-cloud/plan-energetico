@@ -152,6 +152,26 @@ gt_pecem = resultado["UTE"][1]["gt"]
 # Déficit
 deficit = resultado["Deficit"]
 
+# --------------------------------------------------
+# VERIFICAÇÃO DO BALANÇO DE DEMANDA
+# --------------------------------------------------
+
+carga_modelo = sistema["DGer"]["Carga"]
+
+geracao_total = []
+
+for i in range(12):
+
+    total = (
+        gh_chavantes[i]
+        + gh_piraju[i]
+        + gt_termobahia[i]
+        + gt_pecem[i]
+        + deficit[i]
+    )
+
+    geracao_total.append(total)
+
 fig_despacho = go.Figure()
 
 
@@ -208,6 +228,50 @@ fig_despacho.add_trace(
     )
 )
 
+# Linha da carga
+fig_despacho.add_trace(
+    go.Scatter(
+        x=estagios,
+        y=carga_modelo,
+        mode="lines+markers",
+        name="Carga",
+        line=dict(
+            color="black",
+            width=3,
+            dash="dash"
+        ),
+        marker=dict(
+            size=7,
+            color="black"
+        )
+    )
+)
+
+# --------------------------------------------------
+# TESTE DO BALANÇO
+# --------------------------------------------------
+
+tolerancia = 0.01
+
+erro_maximo = max(
+    abs(geracao_total[i] - carga_modelo[i])
+    for i in range(12)
+)
+
+if erro_maximo <= tolerancia:
+
+    st.success(
+        "✅ Balanço de demanda conferido: "
+        "geração + déficit = carga em todos os estágios."
+    )
+
+else:
+
+    st.error(
+        f"⚠️ Erro no balanço de demanda. "
+        f"Maior diferença encontrada: "
+        f"{erro_maximo:.2f} MWmed."
+    )
 
 fig_despacho.update_layout(
 
