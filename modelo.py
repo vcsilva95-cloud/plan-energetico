@@ -186,26 +186,17 @@ def pl_unico(sistema,cenario, imprime):
     
     for i_est in range(sistema["DGer"]["Nr_Est"]):
 
-      cma.append(
-          restricoes[pula + i_est].multiplier.value[0]
-      )
+      cma.append(restricoes[pula + i_est].multiplier.value[0])
 
-      volf.append(
-          vf[i][i_est].value()[0]
-      )
+      volf.append(vf[i][i_est].value()[0])
 
-      volt.append(
-          vt[i][i_est].value()[0]
-      )
+      volt.append(vt[i][i_est].value()[0])
 
-      volv.append(
-          vv[i][i_est].value()[0]
-      )
+      volv.append(vv[i][i_est].value()[0])
 
       # Geração hidráulica = produtividade × volume turbinado
-      gerhid.append(
-          iusi["Prod"] * vt[i][i_est].value()[0]
-      )
+      gerhid.append(iusi["Prod"] * vt[i][i_est].value()[0])
+        
     elemento = {
       "vf": volf,
       "vt": volt,
@@ -267,20 +258,3 @@ def pl_unico(sistema,cenario, imprime):
 
 if __name__ == "__main__":
     resultado = pl_unico(sistema, 0, True)
-
-import numpy as np
-import matplotlib.pyplot as plt
-
-x = np.arange(0, sistema['DGer']['Nr_Est'], 1)
-plt.figure(figsize=(10,8))
-
-for i, iusi in enumerate(resultado["UHE"]):
-    plt.plot(x+1, iusi['vf'], marker='d')
-
-plt.title('Evolução do Volume Armazenado Final (hm^3)')
-plt.xlabel('Periodo ou Mes de Planejamento')
-plt.ylabel('Volume Armazenado (hm^3)')
-plt.xticks(x+1)
-plt.grid()
-plt.tight_layout()
-plt.show()
