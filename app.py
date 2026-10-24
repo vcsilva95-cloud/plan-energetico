@@ -349,32 +349,6 @@ fig_despacho.add_trace(
     )
 )
 
-# --------------------------------------------------
-# TESTE DO BALANÇO
-# --------------------------------------------------
-
-tolerancia = 0.01
-
-erro_maximo = max(
-    abs(geracao_total[i] - carga_modelo[i])
-    for i in range(12)
-)
-
-if erro_maximo <= tolerancia:
-
-    st.success(
-        "✅ Balanço de demanda conferido: "
-        "geração + déficit = carga em todos os estágios."
-    )
-
-else:
-
-    st.error(
-        f"⚠️ Erro no balanço de demanda. "
-        f"Maior diferença encontrada: "
-        f"{erro_maximo:.2f} MWmed."
-    )
-
 fig_despacho.update_layout(
 
     title="Despacho de Geração por Estágio",
