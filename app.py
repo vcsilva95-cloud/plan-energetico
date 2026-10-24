@@ -174,7 +174,7 @@ deficit = resultado["Deficit"]
 # VERIFICAÇÃO DO BALANÇO DE DEMANDA
 # --------------------------------------------------
 
-carga_modelo = sistema["DGer"]["Carga"]
+carga_modelo = sistema_simulacao["DGer"]["Carga"]
 
 geracao_total = []
 
