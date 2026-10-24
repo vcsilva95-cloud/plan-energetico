@@ -228,16 +228,13 @@ def pl_unico(sistema,cenario, imprime):
   for i_est in range(sistema["DGer"]["Nr_Est"]):
     cmo.append(restricoes[pula+i_est].multiplier.value[0])
 
-  Dger = {
-      "CustoTotal": fob.value()[0],
+  Dger = {"CustoTotal": fob.value()[0],
       "CMO": cmo}
 
   lista_deficit = []
 
   for i_est in range(sistema["DGer"]["Nr_Est"]):
-    lista_deficit.append(
-        deficit[i_est].value()[0]
-    )
+    lista_deficit.append(deficit[i_est].value()[0])
     
   resultado={
       "DGer": Dger,
