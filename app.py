@@ -123,23 +123,21 @@ fator_carga = st.sidebar.slider(
 )
 
 # --------------------------------------------------
-# APLICAÇÃO DO FATOR DE CARGA
+# ALTERAÇÃO DA CARGA PELO SLIDER
 # --------------------------------------------------
 
-# Cria uma cópia independente do sistema original
+# Faz uma cópia do sistema original
 sistema_simulacao = copy.deepcopy(sistema)
 
-# Guarda o perfil original de carga
-carga_original = sistema["DGer"]["Carga"]
-
-# Aplica o percentual escolhido no slider
+# Calcula a carga correspondente ao percentual escolhido
 carga_modificada = [
     carga * fator_carga / 100
-    for carga in carga_original
+    for carga in sistema["DGer"]["Carga"]
 ]
 
-# Envia a nova carga para a cópia usada na otimização
+# Coloca a carga modificada no sistema que será otimizado
 sistema_simulacao["DGer"]["Carga"] = carga_modificada
+
 
 # --------------------------------------------------
 # EXECUÇÃO DO MODELO
