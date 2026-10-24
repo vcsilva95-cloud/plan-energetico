@@ -15,22 +15,22 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("âš¡ Despacho Hidrotérmico")
+st.title("Despacho Hidrotérmico")
 st.write("Planejamento Energético - PL Único")
 
 
 # --------------------------------------------------
 # DADOS DO PROBLEMA - BARRA LATERAL
 # --------------------------------------------------
-st.sidebar.header("ðŸ“‹ Dados do problema")
+st.sidebar.header("Dados do problema")
 
-st.sidebar.subheader("âš¡ Sistema")
+st.sidebar.subheader("Sistema")
 st.sidebar.metric(
-    label="Custo do dÃ©ficit",
+    label="Custo do déficit",
     value=f"R$ {sistema['DGer']['CDef']:,.0f} / MWmÃªs".replace(",", ".")
 )
 
-st.sidebar.subheader("ðŸ’§ Usinas Hidrelétricas")
+st.sidebar.subheader("Usinas Hidrelétricas")
 for uhe in sistema["UHE"]:
     st.sidebar.markdown(f"**{uhe['Nome'].replace('UHE ', 'UHE ').title()}**")
     st.sidebar.write(f"Produtibilidade (Ï): {uhe['Prod']:.3f} MWmed/hmÂ³")
@@ -50,10 +50,10 @@ st.sidebar.divider()
 # PARAMETROS DA SIMULAÃ‡ÃƒO (CARGA E CENARIO)
 # --------------------------------------------------
 
-st.sidebar.header("âš™ï¸ ParÃ¢metros da simulaÃ§Ã£o")
+st.sidebar.header("Parâmetros da simulação")
 
 cenario_nome = st.sidebar.radio(
-    "CenÃ¡rio hidrolÃ³gico",
+    "Cenário hidrológico",
     options=["Otimista", "Pessimista"],
     index=0
 )
@@ -90,7 +90,7 @@ sistema_simulacao["DGer"]["Carga"] = carga_modificada
 
 st.sidebar.divider()
 
-st.sidebar.subheader("ðŸ’§ CondiÃ§Ã£o inicial")
+st.sidebar.subheader("Condição inicial")
 
 st.sidebar.caption(
     "UHE Chavantes: informe um volume inicial entre "
@@ -129,7 +129,7 @@ resultado = pl_unico(sistema_simulacao,cenario,False)
 # RESULTADOS
 # --------------------------------------------------
 st.divider()
-st.header("ðŸ“Š Resultados do Modelo")
+st.header("Resultados do Modelo")
 
 estagios = list(range(1, 13))
 gh_chavantes = resultado["UHE"][0]["gh"]
@@ -140,7 +140,7 @@ deficit = resultado["Deficit"]
 carga_modelo = sistema_simulacao["DGer"]["Carga"]
 
 # 1) DESPACHO DE GERAÃ‡ÃƒO
-st.subheader("âš¡ Despacho de GeraÃ§Ã£o por EstÃ¡gio")
+st.subheader("Despacho de Geração por Estágio")
 fig_despacho = go.Figure()
 for y, nome, cor in [
     (gh_chavantes, "UHE Chavantes", "#1565C0"),
@@ -156,7 +156,7 @@ fig_despacho.add_trace(go.Scatter(
     marker=dict(size=7, color="black")
 ))
 fig_despacho.update_layout(
-    title="Despacho de GeraÃ§Ã£o por EstÃ¡gio", xaxis_title="EstÃ¡gio",
+    title="Despacho de Geração por Estágio", xaxis_title="EstÃ¡gio",
     yaxis_title="GeraÃ§Ã£o (MWmed)", barmode="stack",
     legend_title="Fonte de geraÃ§Ã£o", hovermode="x unified"
 )
@@ -165,7 +165,7 @@ st.plotly_chart(fig_despacho, use_container_width=True)
 
 # 2) ARMAZENAMENTO
 st.divider()
-st.subheader("ðŸ’§ EvoluÃ§Ã£o do Armazenamento")
+st.subheader("Evolução do Armazenamento")
 vf_chavantes = resultado["UHE"][0]["vf"]
 vf_piraju = resultado["UHE"][1]["vf"]
 fig_armazenamento = go.Figure()
@@ -178,16 +178,16 @@ fig_armazenamento.add_trace(go.Scatter(
     line=dict(color="#42A5F5", width=3), marker=dict(size=7)
 ))
 fig_armazenamento.update_layout(
-    title="Volume Armazenado Final por EstÃ¡gio", xaxis_title="EstÃ¡gio",
+    title="Volume Armazenado Final por Estágio", xaxis_title="Estágio",
     yaxis_title="Volume armazenado (hmÂ³)", hovermode="x unified",
-    legend_title="ReservatÃ³rio"
+    legend_title="Reservatório"
 )
 fig_armazenamento.update_xaxes(tickmode="linear", dtick=1)
 st.plotly_chart(fig_armazenamento, use_container_width=True)
 
 # 3) CUSTO DE OPERAÃ‡ÃƒO
 st.divider()
-st.subheader("ðŸ’° Custo de OperaÃ§Ã£o por EstÃ¡gio")
+st.subheader("ðŸ’° Custo de Operação por Estágio")
 cvu_termobahia = sistema["UTE"][0]["Custo"]
 cvu_pecem = sistema["UTE"][1]["Custo"]
 custo_deficit = sistema["DGer"]["CDef"]
@@ -212,16 +212,16 @@ st.plotly_chart(fig_custo, use_container_width=True)
 
 custo_formatado = (f"{custo_total_operacao:,.2f}"
                    .replace(",", "X").replace(".", ",").replace("X", "."))
-st.metric(label="ðŸ’° Custo total de operaÃ§Ã£o", value=f"R$ {custo_formatado}")
+st.metric(label="Custo total de operação", value=f"R$ {custo_formatado}")
 
 # RESUMO DA SIMULAÃ‡ÃƒO
 st.divider()
-st.subheader("CenÃ¡rio de carga")
-st.write(f"A carga utilizada na otimizaÃ§Ã£o serÃ¡ {fator_carga}% da carga original.")
+st.subheader("Cenário de carga")
+st.write(f"A carga utilizada na otimização será {fator_carga}% da carga original.")
 if fator_carga == 100:
     st.success("Carga original do sistema")
 elif fator_carga > 100:
     st.warning(f"Carga aumentada em {fator_carga - 100}%")
 else:
     st.info(f"Carga reduzida em {100 - fator_carga}%")
-st.info(f"ðŸŒ§ï¸ CenÃ¡rio hidrolÃ³gico selecionado: **{cenario_nome}**")
+st.info(f"CenÃ¡rio hidrológico selecionado: **{cenario_nome}**")
