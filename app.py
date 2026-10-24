@@ -145,6 +145,28 @@ sistema_simulacao["DGer"]["Carga"] = carga_modificada
 
 resultado = pl_unico(sistema_simulacao,cenario,False)
 
+
+# --------------------------------------------------
+# RESULTADOS - DESPACHO DE GERAÇÃO
+# --------------------------------------------------
+
+st.divider()
+
+st.header("📊 Resultados do Modelo")
+
+estagios = list(range(1, 13))
+
+# Geração hidráulica
+gh_chavantes = resultado["UHE"][0]["gh"]
+gh_piraju = resultado["UHE"][1]["gh"]
+
+# Geração térmica
+gt_termobahia = resultado["UTE"][0]["gt"]
+gt_pecem = resultado["UTE"][1]["gt"]
+
+# Déficit
+deficit = resultado["Deficit"]
+
 # --------------------------------------------------
 # CUSTOS POR ESTÁGIO
 # --------------------------------------------------
@@ -176,44 +198,6 @@ custo_estagio = [
 ]
 
 custo_total_operacao = sum(custo_estagio)
-
-st.metric(
-    label="💰 Custo total de operação",
-    value=f"R$ {custo_total_operacao:,.2f}"
-)
-
-custo_formatado = (
-    f"{custo_total_operacao:,.2f}"
-    .replace(",", "X")
-    .replace(".", ",")
-    .replace("X", ".")
-)
-
-st.metric(
-    label="💰 Custo total de operação",
-    value=f"R$ {custo_formatado}"
-)
-
-# --------------------------------------------------
-# RESULTADOS - DESPACHO DE GERAÇÃO
-# --------------------------------------------------
-
-st.divider()
-
-st.header("📊 Resultados do Modelo")
-
-estagios = list(range(1, 13))
-
-# Geração hidráulica
-gh_chavantes = resultado["UHE"][0]["gh"]
-gh_piraju = resultado["UHE"][1]["gh"]
-
-# Geração térmica
-gt_termobahia = resultado["UTE"][0]["gt"]
-gt_pecem = resultado["UTE"][1]["gt"]
-
-# Déficit
-deficit = resultado["Deficit"]
 
 st.divider()
 
@@ -267,6 +251,18 @@ fig_custo.update_xaxes(
 st.plotly_chart(
     fig_custo,
     use_container_width=True
+)
+
+custo_formatado = (
+    f"{custo_total_operacao:,.2f}"
+    .replace(",", "X")
+    .replace(".", ",")
+    .replace("X", ".")
+)
+
+st.metric(
+    label="💰 Custo total de operação",
+    value=f"R$ {custo_formatado}"
 )
 
 # --------------------------------------------------
