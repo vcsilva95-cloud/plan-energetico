@@ -30,12 +30,6 @@ with st.expander("📋 Dados do problema", expanded=False):
 
     with col1:
         st.metric(
-            label="Carga",
-            value="700 MW"
-        )
-
-    with col2:
-        st.metric(
             label="Custo do déficit",
             value="R$ 5.969.520 / MWmês"
         )
