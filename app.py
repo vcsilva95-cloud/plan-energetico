@@ -1,6 +1,8 @@
 import streamlit as st
 import plotly.graph_objects as go
 
+from modelo import sistema, pl_unico
+
 # --------------------------------------------------
 # CONFIGURAÇÃO DA PÁGINA
 # --------------------------------------------------
@@ -106,7 +108,108 @@ fator_carga = st.sidebar.slider(
     value=100,
     step=5
 )
+# --------------------------------------------------
+# EXECUÇÃO DO MODELO
+# --------------------------------------------------
 
+resultado = pl_unico(
+    sistema,
+    0,
+    False
+)
+
+# --------------------------------------------------
+# RESULTADOS - DESPACHO DE GERAÇÃO
+# --------------------------------------------------
+
+st.divider()
+
+st.header("📊 Resultados do Modelo")
+
+estagios = list(range(1, 13))
+
+# Geração hidráulica
+gh_chavantes = resultado["UHE"][0]["gh"]
+gh_piraju = resultado["UHE"][1]["gh"]
+
+# Geração térmica
+gt_termobahia = resultado["UTE"][0]["gt"]
+gt_pecem = resultado["UTE"][1]["gt"]
+
+
+fig_despacho = go.Figure()
+
+
+# UHE Chavantes
+fig_despacho.add_trace(
+    go.Bar(
+        x=estagios,
+        y=gh_chavantes,
+        name="UHE Chavantes",
+        marker_color="#1565C0"
+    )
+)
+
+
+# UHE Piraju
+fig_despacho.add_trace(
+    go.Bar(
+        x=estagios,
+        y=gh_piraju,
+        name="UHE Piraju",
+        marker_color="#42A5F5"
+    )
+)
+
+
+# UTE Termobahia
+fig_despacho.add_trace(
+    go.Bar(
+        x=estagios,
+        y=gt_termobahia,
+        name="UTE Termobahia",
+        marker_color="#FF9800"
+    )
+)
+
+
+# UTE Pecém II
+fig_despacho.add_trace(
+    go.Bar(
+        x=estagios,
+        y=gt_pecem,
+        name="UTE Pecém II",
+        marker_color="#E53935"
+    )
+)
+
+
+fig_despacho.update_layout(
+
+    title="Despacho de Geração por Estágio",
+
+    xaxis_title="Estágio",
+
+    yaxis_title="Geração (MWmed)",
+
+    barmode="stack",
+
+    legend_title="Fonte de geração",
+
+    hovermode="x unified"
+)
+
+
+fig_despacho.update_xaxes(
+    tickmode="linear",
+    dtick=1
+)
+
+
+st.plotly_chart(
+    fig_despacho,
+    use_container_width=True
+)
 
 # --------------------------------------------------
 # INFORMAÇÃO NA TELA
