@@ -150,8 +150,6 @@ vi_chavantes = st.sidebar.number_input(
     format="%.0f"
 )
 
-# Cria uma cópia dos dados originais
-sistema_simulacao = copy.deepcopy(sistema)
 
 # Altera a carga pelo percentual escolhido
 carga_modificada = [
