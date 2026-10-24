@@ -166,6 +166,109 @@ gt_pecem = resultado["UTE"][1]["gt"]
 # Déficit
 deficit = resultado["Deficit"]
 
+st.divider()
+
+st.subheader("💰 Custo de Operação por Estágio")
+
+fig_custo = go.Figure()
+
+# Termobahia
+fig_custo.add_trace(
+    go.Bar(
+        x=estagios,
+        y=custo_termobahia,
+        name="UTE Termobahia",
+        marker_color="#FF9800"
+    )
+)
+
+# Pecém II
+fig_custo.add_trace(
+    go.Bar(
+        x=estagios,
+        y=custo_pecem,
+        name="UTE Pecém II",
+        marker_color="#E53935"
+    )
+)
+
+# Déficit
+fig_custo.add_trace(
+    go.Bar(
+        x=estagios,
+        y=custo_deficit_estagio,
+        name="Déficit",
+        marker_color="#9E9E9E"
+    )
+)
+
+fig_custo.update_layout(
+    xaxis_title="Estágio",
+    yaxis_title="Custo (R$)",
+    barmode="stack",
+    legend_title="Componente do custo",
+    hovermode="x unified"
+)
+
+fig_custo.update_xaxes(
+    tickmode="linear",
+    dtick=1
+)
+
+st.plotly_chart(
+    fig_custo,
+    use_container_width=True
+)
+
+# --------------------------------------------------
+# CUSTOS POR ESTÁGIO
+# --------------------------------------------------
+
+cvu_termobahia = 424080
+cvu_pecem = 1764000
+custo_deficit = 5969520
+
+custo_termobahia = [
+    gt_termobahia[i] * cvu_termobahia
+    for i in range(12)
+]
+
+custo_pecem = [
+    gt_pecem[i] * cvu_pecem
+    for i in range(12)
+]
+
+custo_deficit_estagio = [
+    deficit[i] * custo_deficit
+    for i in range(12)
+]
+
+custo_estagio = [
+    custo_termobahia[i]
+    + custo_pecem[i]
+    + custo_deficit_estagio[i]
+    for i in range(12)
+]
+
+custo_total_operacao = sum(custo_estagio)
+
+st.metric(
+    label="💰 Custo total de operação",
+    value=f"R$ {custo_total_operacao:,.2f}"
+)
+
+custo_formatado = (
+    f"{custo_total_operacao:,.2f}"
+    .replace(",", "X")
+    .replace(".", ",")
+    .replace("X", ".")
+)
+
+st.metric(
+    label="💰 Custo total de operação",
+    value=f"R$ {custo_formatado}"
+)
+
 # --------------------------------------------------
 # VERIFICAÇÃO DO BALANÇO DE DEMANDA
 # --------------------------------------------------
