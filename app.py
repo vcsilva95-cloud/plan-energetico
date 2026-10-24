@@ -143,11 +143,7 @@ sistema_simulacao["DGer"]["Carga"] = carga_modificada
 # EXECUÇÃO DO MODELO
 # --------------------------------------------------
 
-resultado = pl_unico(
-    sistema,
-    cenario,
-    False
-)
+resultado = pl_unico(sistema_simulacao,cenario,False)
 
 # --------------------------------------------------
 # RESULTADOS - DESPACHO DE GERAÇÃO
