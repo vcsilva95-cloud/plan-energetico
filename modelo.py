@@ -58,7 +58,7 @@ lista_ute=[]
 
 lista_ute.append(usina)
 
-usina={"Nome":"UTE_Pecém_II",
+usina={"Nome":"UTE_PecÃ©m_II",
        "Capac": 144.,
        "Custo":1764000.,}
 
@@ -108,12 +108,12 @@ def pl_unico(sistema,cenario, imprime):
 
   gt = []
   for i, iusi in enumerate(sistema["UTE"]):
-    gt.append(variable(sistema["DGer"]["Nr_Est"], "Geração na Usina Térmica"+iusi["Nome"]))
+    gt.append(variable(sistema["DGer"]["Nr_Est"], "GeraÃ§Ã£o na Usina TÃ©rmica"+iusi["Nome"]))
   deficit = variable(sistema["DGer"]["Nr_Est"],"Deficit de energia no sistema")
 
 
 
-  # Construção da função objetivo
+  # ConstruÃ§Ã£o da funÃ§Ã£o objetivo
 
   fob = 0
 
@@ -126,11 +126,11 @@ def pl_unico(sistema,cenario, imprime):
     for i, iusi in enumerate(sistema["UHE"]):
       fob += 0.01*vv[i][i_est]
 
-  # Definição das restrições
+  # DefiniÃ§Ã£o das restriÃ§Ãµes
 
   restricoes = []
 
-  # Balanço hídrico
+  # BalanÃ§o hÃ­drico
 
   for i, iusi in enumerate(sistema["UHE"]):
     for i_est in range(sistema["DGer"]["Nr_Est"]):
@@ -139,7 +139,7 @@ def pl_unico(sistema,cenario, imprime):
       else:
         restricoes.append(vf[i][i_est] == vf[i][i_est-1] + float(iusi["Afl"][i_est][cenario]) - vt[i][i_est] - vv[i][i_est])
 
-  # Atendimento à Demanda
+  # Atendimento Ã  Demanda
 
   for i_est in range(sistema["DGer"]["Nr_Est"]):
     AD = 0
@@ -150,7 +150,7 @@ def pl_unico(sistema,cenario, imprime):
     AD += deficit[i_est]
     restricoes.append(AD == sistema["DGer"]["Carga"][i_est])
 
-  # Restrições de Canalização
+  # RestriÃ§Ãµes de CanalizaÃ§Ã£o
 
   for i, iusi in enumerate(sistema["UHE"]):
     for i_est in range(sistema["DGer"]["Nr_Est"]):
@@ -168,7 +168,7 @@ def pl_unico(sistema,cenario, imprime):
   for i_est in range(sistema["DGer"]["Nr_Est"]):
     restricoes.append(deficit[i_est] >= 0)
 
-#OTIMIZAÇÃO
+#OTIMIZAÃ‡ÃƒO
   problema = op(fob,restricoes)
   problema.solve('dense','glpk')
 
@@ -181,7 +181,7 @@ def pl_unico(sistema,cenario, imprime):
     volt = []
     volv = []
 
-    # Geração hidráulica de cada estágio
+    # GeraÃ§Ã£o hidrÃ¡ulica de cada estÃ¡gio
     gerhid = []
     
     for i_est in range(sistema["DGer"]["Nr_Est"]):
@@ -194,7 +194,7 @@ def pl_unico(sistema,cenario, imprime):
 
       volv.append(vv[i][i_est].value()[0])
 
-      # Geração hidráulica = produtividade × volume turbinado
+      # GeraÃ§Ã£o hidrÃ¡ulica = produtividade Ã— volume turbinado
       gerhid.append(iusi["Prod"] * vt[i][i_est].value()[0])
         
     elemento = {
@@ -247,20 +247,17 @@ def pl_unico(sistema,cenario, imprime):
   if imprime:
      print("Custo Total:",fob.value())
 
-     print("Volume Final por UHE em cada estágio em h³ ")
+     print("Volume Final por UHE em cada estÃ¡gio em hÂ³ ")
      for i, usi in enumerate(sistema["UHE"]):
         print(vf[i])
         print(vt[i])
         print(vv[i])
 
-     print("Geração por UTE em cada Estágio em MWméd ")
+     print("GeraÃ§Ã£o por UTE em cada EstÃ¡gio em MWmÃ©d ")
      for i, usi in enumerate(sistema["UTE"]):
        print(gt[i])
 
-     print("Déficit de energia em cada estágio em MWmed ")
+     print("DÃ©ficit de energia em cada estÃ¡gio em MWmed ")
      print(deficit)
      print("------------------x------------------")
   return(resultado)
-
-if __name__ == "__main__":
-    resultado = pl_unico(sistema_simulacao,cenario,False)
