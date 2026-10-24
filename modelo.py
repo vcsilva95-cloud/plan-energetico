@@ -135,7 +135,7 @@ def pl_unico(sistema,cenario, imprime):
   for i, iusi in enumerate(sistema["UHE"]):
     for i_est in range(sistema["DGer"]["Nr_Est"]):
       if i_est == 0:
-        restricoes.append(vf[i][i_est] == float(iusi["VI"]) + float(iusi["Afl"][i_est][cenario]) - vt[i][i_est] - vv[i][i_est])
+        restricoes.append(vf[i][i_est] == float(iusi["VolIni"]) + float(iusi["Afl"][i_est][cenario]) - vt[i][i_est] - vv[i][i_est])
       else:
         restricoes.append(vf[i][i_est] == vf[i][i_est-1] + float(iusi["Afl"][i_est][cenario]) - vt[i][i_est] - vv[i][i_est])
 
