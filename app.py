@@ -5,99 +5,54 @@ import copy
 from modelo import sistema, pl_unico
 
 # --------------------------------------------------
-# CONFIGURAÇÃO DA PÁGINA
+# CONFIGURAÃ‡ÃƒO DA PÃGINA
 # --------------------------------------------------
 
 st.set_page_config(
-    page_title="Despacho Hidrotérmico",
-    page_icon="⚡",
+    page_title="Despacho HidrotÃ©rmico",
+    page_icon="âš¡",
     layout="wide"
 )
 
-st.title("⚡ Despacho Hidrotérmico")
-st.write("Planejamento Energético - PL Único")
+st.title("âš¡ Despacho HidrotÃ©rmico")
+st.write("Planejamento EnergÃ©tico - PL Ãšnico")
 
 
 # --------------------------------------------------
-# DADOS DO PROBLEMA
+# DADOS DO PROBLEMA - BARRA LATERAL
 # --------------------------------------------------
+st.sidebar.header("ðŸ“‹ Dados do problema")
 
-with st.expander("📋 Dados do problema", expanded=False):
+st.sidebar.subheader("âš¡ Sistema")
+st.sidebar.metric(
+    label="Custo do dÃ©ficit",
+    value=f"R$ {sistema['DGer']['CDef']:,.0f} / MWmÃªs".replace(",", ".")
+)
 
-    st.subheader("⚡ Sistema")
+st.sidebar.subheader("ðŸ’§ Usinas HidrelÃ©tricas")
+for uhe in sistema["UHE"]:
+    st.sidebar.markdown(f"**{uhe['Nome'].replace('UHE ', 'UHE ').title()}**")
+    st.sidebar.write(f"Produtibilidade (Ï): {uhe['Prod']:.3f} MWmed/hmÂ³")
+    st.sidebar.write(f"Volume mÃ¡ximo: {uhe['Vmax']:,.0f} hmÂ³".replace(",", "."))
+    st.sidebar.write(f"Volume mÃ­nimo: {uhe['Vmin']:,.0f} hmÂ³".replace(",", "."))
+    st.sidebar.write(f"Volume Ãºtil: {uhe['Vmax'] - uhe['Vmin']:,.0f} hmÂ³".replace(",", "."))
 
-    col1, col2 = st.columns(2)
+st.sidebar.subheader("ðŸ”¥ Usinas TermelÃ©tricas")
+for ute in sistema["UTE"]:
+    st.sidebar.markdown(f"**{ute['Nome'].replace('_', ' ')}**")
+    st.sidebar.write(f"PotÃªncia mÃ¡xima: {ute['Capac']:.0f} MW")
+    st.sidebar.write(f"CVU: R$ {ute['Custo']:,.0f} / MWmÃªs".replace(",", "."))
 
-    with col1:
-        st.metric(
-            label="Custo do déficit",
-            value="R$ 5.969.520 / MWmês"
-        )
-
-    st.divider()
-
-    # --------------------------------------------------
-    # USINAS HIDRELÉTRICAS
-    # --------------------------------------------------
-
-    st.subheader("💧 Usinas Hidrelétricas")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-
-        st.markdown("### UHE Chavantes")
-
-        st.write("**Potência nominal:** 414 MW")
-        st.write("**Produtibilidade (ρ):** 0,235 MWmed/hm³")
-        st.write("**Volume máximo:** 8.795 hm³")
-        st.write("**Volume mínimo:** 5.754 hm³")
-        st.write("**Volume útil:** 3.041 hm³")
-
-    with col2:
-
-        st.markdown("### UHE Piraju")
-
-        st.write("**Potência nominal:** 480 MW")
-        st.write("**Produtibilidade (ρ):** 0,089 MWmed/hm³")
-        st.write("**Volume máximo:** 84 hm³")
-        st.write("**Volume mínimo:** 84 hm³")
-        st.write("**Volume útil:** 0 hm³")
-
-    st.divider()
-
-    # --------------------------------------------------
-    # USINAS TERMELÉTRICAS
-    # --------------------------------------------------
-
-    st.subheader("🔥 Usinas Termelétricas")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-
-        st.markdown("### GT1 - UTE Termobahia")
-        st.caption("Combustível: Gás")
-
-        st.write("**Potência nominal:** 186 MW")
-        st.write("**CVU:** R$ 424.080 / MWmês")
-
-    with col2:
-
-        st.markdown("### GT2 - UTE Pecém II")
-        st.caption("Combustível: Diesel")
-
-        st.write("**Potência nominal:** 144 MW")
-        st.write("**CVU:** R$ 1.764.000 / MWmês")
+st.sidebar.divider()
 
 # --------------------------------------------------
-# PARAMETROS DA SIMULAÇÃO (CARGA E CENARIO)
+# PARAMETROS DA SIMULAÃ‡ÃƒO (CARGA E CENARIO)
 # --------------------------------------------------
 
-st.sidebar.header("⚙️ Parâmetros da simulação")
+st.sidebar.header("âš™ï¸ ParÃ¢metros da simulaÃ§Ã£o")
 
 cenario_nome = st.sidebar.radio(
-    "Cenário hidrológico",
+    "CenÃ¡rio hidrolÃ³gico",
     options=["Otimista", "Pessimista"],
     index=0
 )
@@ -117,10 +72,10 @@ fator_carga = st.sidebar.slider(
 )
 
 # --------------------------------------------------
-# ALTERAÇÃO DA CARGA PELO SLIDER
+# ALTERAÃ‡ÃƒO DA CARGA PELO SLIDER
 # --------------------------------------------------
 
-# Faz uma cópia do sistema original
+# Faz uma cÃ³pia do sistema original
 sistema_simulacao = copy.deepcopy(sistema)
 
 # Calcula a carga correspondente ao percentual escolhido
@@ -129,20 +84,20 @@ carga_modificada = [
     for carga in sistema["DGer"]["Carga"]
 ]
 
-# Coloca a carga modificada no sistema que será otimizado
+# Coloca a carga modificada no sistema que serÃ¡ otimizado
 sistema_simulacao["DGer"]["Carga"] = carga_modificada
 
 st.sidebar.divider()
 
-st.sidebar.subheader("💧 Condição inicial")
+st.sidebar.subheader("ðŸ’§ CondiÃ§Ã£o inicial")
 
 st.sidebar.caption(
     "UHE Chavantes: informe um volume inicial entre "
-    "5.754 e 8.795 hm³."
+    "5.754 e 8.795 hmÂ³."
 )
 
 vi_chavantes = st.sidebar.number_input(
-    "Volume inicial - UHE Chavantes (hm³)",
+    "Volume inicial - UHE Chavantes (hmÂ³)",
     min_value=5754.0,
     max_value=8795.0,
     value=7500.0,
@@ -160,335 +115,112 @@ carga_modificada = [
 sistema_simulacao["DGer"]["Carga"] = carga_modificada
 
 # Altera o volume inicial de Chavantes
-sistema_simulacao["UHE"][0]["VolIni"] = vi_chavantes
+sistema_simulacao["UHE"][0]["VI"] = vi_chavantes
 
-# Executa a otimização
-resultado = pl_unico(
-    sistema_simulacao,
-    cenario,
-    False
-)
 # --------------------------------------------------
-# EXECUÇÃO DO MODELO
+# EXECUÃ‡ÃƒO DO MODELO
 # --------------------------------------------------
 
 resultado = pl_unico(sistema_simulacao,cenario,False)
 
 
 # --------------------------------------------------
-# RESULTADOS - DESPACHO DE GERAÇÃO
+# RESULTADOS
 # --------------------------------------------------
-
 st.divider()
-
-st.header("📊 Resultados do Modelo")
+st.header("ðŸ“Š Resultados do Modelo")
 
 estagios = list(range(1, 13))
-
-# Geração hidráulica
 gh_chavantes = resultado["UHE"][0]["gh"]
 gh_piraju = resultado["UHE"][1]["gh"]
-
-# Geração térmica
 gt_termobahia = resultado["UTE"][0]["gt"]
 gt_pecem = resultado["UTE"][1]["gt"]
-
-# Déficit
 deficit = resultado["Deficit"]
-
-# --------------------------------------------------
-# CUSTOS POR ESTÁGIO
-# --------------------------------------------------
-
-cvu_termobahia = 424080
-cvu_pecem = 1764000
-custo_deficit = 5969520
-
-custo_termobahia = [
-    gt_termobahia[i] * cvu_termobahia
-    for i in range(12)
-]
-
-custo_pecem = [
-    gt_pecem[i] * cvu_pecem
-    for i in range(12)
-]
-
-custo_deficit_estagio = [
-    deficit[i] * custo_deficit
-    for i in range(12)
-]
-
-custo_estagio = [
-    custo_termobahia[i]
-    + custo_pecem[i]
-    + custo_deficit_estagio[i]
-    for i in range(12)
-]
-
-custo_total_operacao = sum(custo_estagio)
-
-st.divider()
-
-st.subheader("💰 Custo de Operação por Estágio")
-
-fig_custo = go.Figure()
-
-# Termobahia
-fig_custo.add_trace(
-    go.Bar(
-        x=estagios,
-        y=custo_termobahia,
-        name="UTE Termobahia",
-        marker_color="#FF9800"
-    )
-)
-
-# Pecém II
-fig_custo.add_trace(
-    go.Bar(
-        x=estagios,
-        y=custo_pecem,
-        name="UTE Pecém II",
-        marker_color="#E53935"
-    )
-)
-
-# Déficit
-fig_custo.add_trace(
-    go.Bar(
-        x=estagios,
-        y=custo_deficit_estagio,
-        name="Déficit",
-        marker_color="#9E9E9E"
-    )
-)
-
-fig_custo.update_layout(
-    xaxis_title="Estágio",
-    yaxis_title="Custo (R$)",
-    barmode="stack",
-    legend_title="Componente do custo",
-    hovermode="x unified"
-)
-
-fig_custo.update_xaxes(
-    tickmode="linear",
-    dtick=1
-)
-
-st.plotly_chart(
-    fig_custo,
-    use_container_width=True
-)
-
-custo_formatado = (
-    f"{custo_total_operacao:,.2f}"
-    .replace(",", "X")
-    .replace(".", ",")
-    .replace("X", ".")
-)
-
-st.metric(
-    label="💰 Custo total de operação",
-    value=f"R$ {custo_formatado}"
-)
-# --------------------------------------------------
-# ARMAZENAMENTO DOS RESERVATÓRIOS
-# --------------------------------------------------
-
-vf_chavantes = resultado["UHE"][0]["vf"]
-vf_piraju = resultado["UHE"][1]["vf"]
-
-st.divider()
-
-st.subheader("💧 Evolução do Armazenamento")
-
-fig_armazenamento = go.Figure()
-
-# UHE Chavantes
-fig_armazenamento.add_trace(
-    go.Scatter(
-        x=estagios,
-        y=vf_chavantes,
-        mode="lines+markers",
-        name="UHE Chavantes",
-        line=dict(
-            color="#1565C0",
-            width=3
-        ),
-        marker=dict(size=7)
-    )
-)
-
-# UHE Piraju
-fig_armazenamento.add_trace(
-    go.Scatter(
-        x=estagios,
-        y=vf_piraju,
-        mode="lines+markers",
-        name="UHE Piraju",
-        line=dict(
-            color="#42A5F5",
-            width=3
-        ),
-        marker=dict(size=7)
-    )
-)
-
-fig_armazenamento.update_layout(
-    title="Volume Armazenado Final por Estágio",
-    xaxis_title="Estágio",
-    yaxis_title="Volume armazenado (hm³)",
-    hovermode="x unified",
-    legend_title="Reservatório"
-)
-
-fig_armazenamento.update_xaxes(
-    tickmode="linear",
-    dtick=1
-)
-
-st.plotly_chart(
-    fig_armazenamento,
-    use_container_width=True
-)
-
-# --------------------------------------------------
-# VERIFICAÇÃO DO BALANÇO DE DEMANDA
-# --------------------------------------------------
-
 carga_modelo = sistema_simulacao["DGer"]["Carga"]
 
-geracao_total = []
-
-for i in range(12):
-
-    total = (
-        gh_chavantes[i]
-        + gh_piraju[i]
-        + gt_termobahia[i]
-        + gt_pecem[i]
-        + deficit[i])
-
-    geracao_total.append(total)
-
+# 1) DESPACHO DE GERAÃ‡ÃƒO
+st.subheader("âš¡ Despacho de GeraÃ§Ã£o por EstÃ¡gio")
 fig_despacho = go.Figure()
-
-
-# UHE Chavantes
-fig_despacho.add_trace(
-    go.Bar(
-        x=estagios,
-        y=gh_chavantes,
-        name="UHE Chavantes",
-        marker_color="#1565C0"))
-
-
-# UHE Piraju
-fig_despacho.add_trace(
-    go.Bar(
-        x=estagios,
-        y=gh_piraju,
-        name="UHE Piraju",
-        marker_color="#42A5F5"))
-
-
-# UTE Termobahia
-fig_despacho.add_trace(
-    go.Bar(
-        x=estagios,
-        y=gt_termobahia,
-        name="UTE Termobahia",
-        marker_color="#FF9800"))
-
-
-# UTE Pecém II
-fig_despacho.add_trace(
-    go.Bar(
-        x=estagios,
-        y=gt_pecem,
-        name="UTE Pecém II",
-        marker_color="#E53935"))
-
-# Déficit
-fig_despacho.add_trace(
-    go.Bar(
-        x=estagios,
-        y=deficit,
-        name="Déficit",
-        marker_color="#9E9E9E"))
-
-# Linha da carga
-fig_despacho.add_trace(
-    go.Scatter(
-        x=estagios,
-        y=carga_modelo,
-        mode="lines+markers",
-        name="Carga",
-        line=dict(
-            color="black",
-            width=3,
-            dash="dash"
-        ),
-        marker=dict(
-            size=7,
-            color="black"
-        )
-    )
-)
-
+for y, nome, cor in [
+    (gh_chavantes, "UHE Chavantes", "#1565C0"),
+    (gh_piraju, "UHE Piraju", "#42A5F5"),
+    (gt_termobahia, "UTE Termobahia", "#FF9800"),
+    (gt_pecem, "UTE PecÃ©m II", "#E53935"),
+    (deficit, "DÃ©ficit", "#9E9E9E"),
+]:
+    fig_despacho.add_trace(go.Bar(x=estagios, y=y, name=nome, marker_color=cor))
+fig_despacho.add_trace(go.Scatter(
+    x=estagios, y=carga_modelo, mode="lines+markers", name="Carga",
+    line=dict(color="black", width=3, dash="dash"),
+    marker=dict(size=7, color="black")
+))
 fig_despacho.update_layout(
-
-    title="Despacho de Geração por Estágio",
-
-    xaxis_title="Estágio",
-
-    yaxis_title="Geração (MWmed)",
-
-    barmode="stack",
-
-    legend_title="Fonte de geração",
-
-    hovermode="x unified"
+    title="Despacho de GeraÃ§Ã£o por EstÃ¡gio", xaxis_title="EstÃ¡gio",
+    yaxis_title="GeraÃ§Ã£o (MWmed)", barmode="stack",
+    legend_title="Fonte de geraÃ§Ã£o", hovermode="x unified"
 )
+fig_despacho.update_xaxes(tickmode="linear", dtick=1)
+st.plotly_chart(fig_despacho, use_container_width=True)
 
-
-fig_despacho.update_xaxes(
-    tickmode="linear",
-    dtick=1
+# 2) ARMAZENAMENTO
+st.divider()
+st.subheader("ðŸ’§ EvoluÃ§Ã£o do Armazenamento")
+vf_chavantes = resultado["UHE"][0]["vf"]
+vf_piraju = resultado["UHE"][1]["vf"]
+fig_armazenamento = go.Figure()
+fig_armazenamento.add_trace(go.Scatter(
+    x=estagios, y=vf_chavantes, mode="lines+markers", name="UHE Chavantes",
+    line=dict(color="#1565C0", width=3), marker=dict(size=7)
+))
+fig_armazenamento.add_trace(go.Scatter(
+    x=estagios, y=vf_piraju, mode="lines+markers", name="UHE Piraju",
+    line=dict(color="#42A5F5", width=3), marker=dict(size=7)
+))
+fig_armazenamento.update_layout(
+    title="Volume Armazenado Final por EstÃ¡gio", xaxis_title="EstÃ¡gio",
+    yaxis_title="Volume armazenado (hmÂ³)", hovermode="x unified",
+    legend_title="ReservatÃ³rio"
 )
+fig_armazenamento.update_xaxes(tickmode="linear", dtick=1)
+st.plotly_chart(fig_armazenamento, use_container_width=True)
 
-
-st.plotly_chart(
-    fig_despacho,
-    use_container_width=True
+# 3) CUSTO DE OPERAÃ‡ÃƒO
+st.divider()
+st.subheader("ðŸ’° Custo de OperaÃ§Ã£o por EstÃ¡gio")
+cvu_termobahia = sistema["UTE"][0]["Custo"]
+cvu_pecem = sistema["UTE"][1]["Custo"]
+custo_deficit = sistema["DGer"]["CDef"]
+custo_termobahia = [gt_termobahia[i] * cvu_termobahia for i in range(12)]
+custo_pecem = [gt_pecem[i] * cvu_pecem for i in range(12)]
+custo_deficit_estagio = [deficit[i] * custo_deficit for i in range(12)]
+custo_estagio = [
+    custo_termobahia[i] + custo_pecem[i] + custo_deficit_estagio[i]
+    for i in range(12)
+]
+custo_total_operacao = sum(custo_estagio)
+fig_custo = go.Figure()
+fig_custo.add_trace(go.Bar(x=estagios, y=custo_termobahia, name="UTE Termobahia", marker_color="#FF9800"))
+fig_custo.add_trace(go.Bar(x=estagios, y=custo_pecem, name="UTE PecÃ©m II", marker_color="#E53935"))
+fig_custo.add_trace(go.Bar(x=estagios, y=custo_deficit_estagio, name="DÃ©ficit", marker_color="#9E9E9E"))
+fig_custo.update_layout(
+    xaxis_title="EstÃ¡gio", yaxis_title="Custo (R$)", barmode="stack",
+    legend_title="Componente do custo", hovermode="x unified"
 )
+fig_custo.update_xaxes(tickmode="linear", dtick=1)
+st.plotly_chart(fig_custo, use_container_width=True)
 
-# --------------------------------------------------
-# INFORMAÇÃO NA TELA
-# --------------------------------------------------
+custo_formatado = (f"{custo_total_operacao:,.2f}"
+                   .replace(",", "X").replace(".", ",").replace("X", "."))
+st.metric(label="ðŸ’° Custo total de operaÃ§Ã£o", value=f"R$ {custo_formatado}")
 
-st.subheader("Cenário de carga")
-
-st.write(
-    f"A carga utilizada na otimização será "
-    f"{fator_carga}% da carga original."
-)
-
+# RESUMO DA SIMULAÃ‡ÃƒO
+st.divider()
+st.subheader("CenÃ¡rio de carga")
+st.write(f"A carga utilizada na otimizaÃ§Ã£o serÃ¡ {fator_carga}% da carga original.")
 if fator_carga == 100:
     st.success("Carga original do sistema")
-
 elif fator_carga > 100:
-    st.warning(
-        f"Carga aumentada em {fator_carga - 100}%"
-    )
-
+    st.warning(f"Carga aumentada em {fator_carga - 100}%")
 else:
-    st.info(
-        f"Carga reduzida em {100 - fator_carga}%"
-    )
-
-st.info(
-    f"🌧️ Cenário hidrológico selecionado: **{cenario_nome}**"
-)
+    st.info(f"Carga reduzida em {100 - fator_carga}%")
+st.info(f"ðŸŒ§ï¸ CenÃ¡rio hidrolÃ³gico selecionado: **{cenario_nome}**")
