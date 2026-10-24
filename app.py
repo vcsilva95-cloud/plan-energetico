@@ -132,7 +132,44 @@ carga_modificada = [
 # Coloca a carga modificada no sistema que será otimizado
 sistema_simulacao["DGer"]["Carga"] = carga_modificada
 
+st.sidebar.divider()
 
+st.sidebar.subheader("💧 Condição inicial")
+
+st.sidebar.caption(
+    "UHE Chavantes: informe um volume inicial entre "
+    "5.754 e 8.795 hm³."
+)
+
+vi_chavantes = st.sidebar.number_input(
+    "Volume inicial - UHE Chavantes (hm³)",
+    min_value=5754.0,
+    max_value=8795.0,
+    value=7500.0,
+    step=1.0,
+    format="%.0f"
+)
+
+# Cria uma cópia dos dados originais
+sistema_simulacao = copy.deepcopy(sistema)
+
+# Altera a carga pelo percentual escolhido
+carga_modificada = [
+    carga * fator_carga / 100
+    for carga in sistema["DGer"]["Carga"]
+]
+
+sistema_simulacao["DGer"]["Carga"] = carga_modificada
+
+# Altera o volume inicial de Chavantes
+sistema_simulacao["UHE"][0]["VolIni"] = vi_chavantes
+
+# Executa a otimização
+resultado = pl_unico(
+    sistema_simulacao,
+    cenario,
+    False
+)
 # --------------------------------------------------
 # EXECUÇÃO DO MODELO
 # --------------------------------------------------
