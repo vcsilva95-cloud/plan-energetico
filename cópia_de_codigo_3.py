@@ -233,12 +233,21 @@ def pl_unico(sistema,cenario, imprime):
     volf = []
     volt = []
     volv = []
+
+    # Geração hidráulica de cada estágio
+    gerhid = []
+    
     for i_est in range(sistema["DGer"]["Nr_Est"]):
       cma.append(restricoes[pula+i_est].multiplier.value[0])
 
       volf.append(vf[i][i_est].value()[0])
       volt.append(vt[i][i_est].value()[0])
       volv.append(vv[i][i_est].value()[0])
+
+    # Geração hidráulica = produtividade × volume turbinado
+        gerhid.append(
+            iusi["Prod"] * vt[i][i_est].value()[0]
+        )
     elemento = {
       "vf": volf,
       "vt": volt,
