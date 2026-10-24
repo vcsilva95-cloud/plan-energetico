@@ -172,27 +172,6 @@ gt_pecem = resultado["UTE"][1]["gt"]
 # Déficit
 deficit = resultado["Deficit"]
 
-st.subheader("Conferência do balanço")
-
-for i in range(12):
-
-    total = (
-        gh_chavantes[i]
-        + gh_piraju[i]
-        + gt_termobahia[i]
-        + gt_pecem[i]
-        + deficit[i]
-    )
-
-    carga = sistema["DGer"]["Carga"][i]
-
-    st.write(
-        f"Estágio {i+1}: "
-        f"Carga = {carga:.2f} | "
-        f"Geração + Déficit = {total:.2f} | "
-        f"Déficit = {deficit[i]:.2f}"
-    )
-
 # --------------------------------------------------
 # VERIFICAÇÃO DO BALANÇO DE DEMANDA
 # --------------------------------------------------
