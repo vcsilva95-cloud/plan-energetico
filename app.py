@@ -96,10 +96,22 @@ with st.expander("📋 Dados do problema", expanded=False):
         st.write("**CVU:** R$ 1.764.000 / MWmês")
 
 # --------------------------------------------------
-# BARRA LATERAL
+# PARAMETROS DA SIMULAÇÃO (CARGA E CENARIO)
 # --------------------------------------------------
 
 st.sidebar.header("⚙️ Parâmetros da simulação")
+
+cenario_nome = st.sidebar.radio(
+    "Cenário hidrológico",
+    options=["Otimista", "Pessimista"],
+    index=0
+)
+
+if cenario_nome == "Otimista":
+    cenario = 0
+else:
+    cenario = 1
+
 
 fator_carga = st.sidebar.slider(
     "Carga do sistema (%)",
@@ -108,13 +120,14 @@ fator_carga = st.sidebar.slider(
     value=100,
     step=5
 )
+
 # --------------------------------------------------
 # EXECUÇÃO DO MODELO
 # --------------------------------------------------
 
 resultado = pl_unico(
     sistema,
-    0,
+    cenario,
     False
 )
 
@@ -234,3 +247,7 @@ else:
     st.info(
         f"Carga reduzida em {100 - fator_carga}%"
     )
+
+st.info(
+    f"🌧️ Cenário hidrológico selecionado: **{cenario_nome}**"
+)
