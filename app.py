@@ -258,6 +258,66 @@ st.metric(
     label="💰 Custo total de operação",
     value=f"R$ {custo_formatado}"
 )
+# --------------------------------------------------
+# ARMAZENAMENTO DOS RESERVATÓRIOS
+# --------------------------------------------------
+
+vf_chavantes = resultado["UHE"][0]["vf"]
+vf_piraju = resultado["UHE"][1]["vf"]
+
+st.divider()
+
+st.subheader("💧 Evolução do Armazenamento")
+
+fig_armazenamento = go.Figure()
+
+# UHE Chavantes
+fig_armazenamento.add_trace(
+    go.Scatter(
+        x=estagios,
+        y=vf_chavantes,
+        mode="lines+markers",
+        name="UHE Chavantes",
+        line=dict(
+            color="#1565C0",
+            width=3
+        ),
+        marker=dict(size=7)
+    )
+)
+
+# UHE Piraju
+fig_armazenamento.add_trace(
+    go.Scatter(
+        x=estagios,
+        y=vf_piraju,
+        mode="lines+markers",
+        name="UHE Piraju",
+        line=dict(
+            color="#42A5F5",
+            width=3
+        ),
+        marker=dict(size=7)
+    )
+)
+
+fig_armazenamento.update_layout(
+    title="Volume Armazenado Final por Estágio",
+    xaxis_title="Estágio",
+    yaxis_title="Volume armazenado (hm³)",
+    hovermode="x unified",
+    legend_title="Reservatório"
+)
+
+fig_armazenamento.update_xaxes(
+    tickmode="linear",
+    dtick=1
+)
+
+st.plotly_chart(
+    fig_armazenamento,
+    use_container_width=True
+)
 
 # --------------------------------------------------
 # VERIFICAÇÃO DO BALANÇO DE DEMANDA
