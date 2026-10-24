@@ -27,22 +27,22 @@ st.sidebar.header("Dados do problema")
 st.sidebar.subheader("Sistema")
 st.sidebar.metric(
     label="Custo do déficit",
-    value=f"R$ {sistema['DGer']['CDef']:,.0f} / MWmÃªs".replace(",", ".")
+    value=f"R$ {sistema['DGer']['CDef']:,.0f} / MWméd".replace(",", ".")
 )
 
 st.sidebar.subheader("Usinas Hidrelétricas")
 for uhe in sistema["UHE"]:
     st.sidebar.markdown(f"**{uhe['Nome'].replace('UHE ', 'UHE ').title()}**")
-    st.sidebar.write(f"Produtibilidade (Ï): {uhe['Prod']:.3f} MWmed/hmÂ³")
-    st.sidebar.write(f"Volume máximo: {uhe['Vmax']:,.0f} hmÂ³".replace(",", "."))
-    st.sidebar.write(f"Volume mínimo: {uhe['Vmin']:,.0f} hmÂ³".replace(",", "."))
-    st.sidebar.write(f"Volume Útil: {uhe['Vmax'] - uhe['Vmin']:,.0f} hmÂ³".replace(",", "."))
+    st.sidebar.write(f"Produtibilidade (Ï): {uhe['Prod']:.3f} MWmed/hm³")
+    st.sidebar.write(f"Volume máximo: {uhe['Vmax']:,.0f} hm³".replace(",", "."))
+    st.sidebar.write(f"Volume mínimo: {uhe['Vmin']:,.0f} hm³".replace(",", "."))
+    st.sidebar.write(f"Volume Útil: {uhe['Vmax'] - uhe['Vmin']:,.0f} hm³".replace(",", "."))
 
-st.sidebar.subheader("ðŸ”¥ Usinas TermelÃ©tricas")
+st.sidebar.subheader("Usinas Termelétricas")
 for ute in sistema["UTE"]:
     st.sidebar.markdown(f"**{ute['Nome'].replace('_', ' ')}**")
     st.sidebar.write(f"Potência máxima: {ute['Capac']:.0f} MW")
-    st.sidebar.write(f"CVU: R$ {ute['Custo']:,.0f} / MWmÃªs".replace(",", "."))
+    st.sidebar.write(f"CVU: R$ {ute['Custo']:,.0f} / MWméd".replace(",", "."))
 
 st.sidebar.divider()
 
@@ -94,11 +94,11 @@ st.sidebar.subheader("Condição inicial")
 
 st.sidebar.caption(
     "UHE Chavantes: informe um volume inicial entre "
-    "5.754 e 8.795 hmÂ³."
+    "5.754 e 8.795 hm³."
 )
 
 vi_chavantes = st.sidebar.number_input(
-    "Volume inicial - UHE Chavantes (hmÂ³)",
+    "Volume inicial - UHE Chavantes (hm³)",
     min_value=5754.0,
     max_value=8795.0,
     value=7500.0,
