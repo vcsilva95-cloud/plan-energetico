@@ -144,7 +144,7 @@ def pl_unico(sistema,cenario, imprime):
   for i_est in range(sistema["DGer"]["Nr_Est"]):
     AD = 0
     for i, usi in enumerate(sistema["UHE"]):
-      AD += iusi["Prod"]*vt[i][i_est]
+      AD += usi["Prod"]*vt[i][i_est]
     for i, usi in enumerate(sistema["UTE"]):
       AD += gt[i][i_est]
     AD += deficit[i_est]
