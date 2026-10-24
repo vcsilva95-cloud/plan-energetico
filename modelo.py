@@ -222,6 +222,7 @@ def pl_unico(sistema,cenario, imprime):
 
     lista_UTE.append(resultado_ute)
 
+    
   pula = Num_UHE*sistema["DGer"]["Nr_Est"]
   cmo = []
   for i_est in range(sistema["DGer"]["Nr_Est"]):
@@ -231,10 +232,18 @@ def pl_unico(sistema,cenario, imprime):
       "CustoTotal": fob.value()[0],
       "CMO": cmo}
 
+  lista_deficit = []
+
+  for i_est in range(sistema["DGer"]["Nr_Est"]):
+    lista_deficit.append(
+        deficit[i_est].value()[0]
+    )
+    
   resultado={
       "DGer": Dger,
       "UHE": lista_UHE,
-      "UTE": lista_UTE}
+      "UTE": lista_UTE,
+      "Deficit": lista_deficit}
 
 ## IMPRIME ##
 
