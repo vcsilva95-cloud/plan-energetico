@@ -67,7 +67,7 @@ lista_ute.append(usina)
 d_gerais = {
     "CDef": 5969520,
     "Carga": [
-        700.,  # Jan
+        1000.,  # Jan
         508.,  # Fev
         516.,  # Mar
         437.,  # Abr
