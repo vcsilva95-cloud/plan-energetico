@@ -172,6 +172,27 @@ gt_pecem = resultado["UTE"][1]["gt"]
 # Déficit
 deficit = resultado["Deficit"]
 
+st.subheader("Conferência do balanço")
+
+for i in range(12):
+
+    total = (
+        gh_chavantes[i]
+        + gh_piraju[i]
+        + gt_termobahia[i]
+        + gt_pecem[i]
+        + deficit[i]
+    )
+
+    carga = sistema["DGer"]["Carga"][i]
+
+    st.write(
+        f"Estágio {i+1}: "
+        f"Carga = {carga:.2f} | "
+        f"Geração + Déficit = {total:.2f} | "
+        f"Déficit = {deficit[i]:.2f}"
+    )
+
 # --------------------------------------------------
 # VERIFICAÇÃO DO BALANÇO DE DEMANDA
 # --------------------------------------------------
@@ -187,8 +208,7 @@ for i in range(12):
         + gh_piraju[i]
         + gt_termobahia[i]
         + gt_pecem[i]
-        + deficit[i]
-    )
+        + deficit[i])
 
     geracao_total.append(total)
 
@@ -201,9 +221,7 @@ fig_despacho.add_trace(
         x=estagios,
         y=gh_chavantes,
         name="UHE Chavantes",
-        marker_color="#1565C0"
-    )
-)
+        marker_color="#1565C0"))
 
 
 # UHE Piraju
@@ -212,9 +230,7 @@ fig_despacho.add_trace(
         x=estagios,
         y=gh_piraju,
         name="UHE Piraju",
-        marker_color="#42A5F5"
-    )
-)
+        marker_color="#42A5F5"))
 
 
 # UTE Termobahia
@@ -223,9 +239,7 @@ fig_despacho.add_trace(
         x=estagios,
         y=gt_termobahia,
         name="UTE Termobahia",
-        marker_color="#FF9800"
-    )
-)
+        marker_color="#FF9800"))
 
 
 # UTE Pecém II
@@ -234,9 +248,7 @@ fig_despacho.add_trace(
         x=estagios,
         y=gt_pecem,
         name="UTE Pecém II",
-        marker_color="#E53935"
-    )
-)
+        marker_color="#E53935"))
 
 # Déficit
 fig_despacho.add_trace(
@@ -244,9 +256,7 @@ fig_despacho.add_trace(
         x=estagios,
         y=deficit,
         name="Déficit",
-        marker_color="#9E9E9E"
-    )
-)
+        marker_color="#9E9E9E"))
 
 # Linha da carga
 fig_despacho.add_trace(
