@@ -252,6 +252,7 @@ def pl_unico(sistema,cenario, imprime):
       "vf": volf,
       "vt": volt,
       "vv": volv,
+      "gh": gerhid,
       "cma": cma
       }
     lista_UHE.append(elemento)
