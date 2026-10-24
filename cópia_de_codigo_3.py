@@ -257,14 +257,20 @@ def pl_unico(sistema,cenario, imprime):
       }
     lista_UHE.append(elemento)
 
-    lista_UTE = []
-    for i, iusi in enumerate(sistema["UTE"]):
-      gerter = []
-      for iest in range(sistema["DGer"]["Nr_Est"]):
-        gerter.append(gt[i][iest].value()[0])
-      resultado_ute={
+  lista_UTE = []
+
+  for i, iusi in enumerate(sistema["UTE"]):
+    gerter = []
+
+    for i_est in range(sistema["DGer"]["Nr_Est"]):
+      gerter.append(
+          gt[i][i_est].value()[0]
+      )
+
+    resultado_ute = {
         "gt": gerter
-      }
+    }
+
     lista_UTE.append(resultado_ute)
 
   pula = Num_UHE*sistema["DGer"]["Nr_Est"]
