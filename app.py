@@ -146,7 +146,7 @@ for y, nome, cor in [
     (gh_chavantes, "UHE Chavantes", "#1565C0"),
     (gh_piraju, "UHE Piraju", "#42A5F5"),
     (gt_termobahia, "UTE Termobahia", "#FF9800"),
-    (gt_pecem, "UTE Pecém II", "#E53935"),
+    (gt_pecem, "UTE Pecem II", "#E53935"),
     (deficit, "Déficit", "#9E9E9E"),
 ]:
     fig_despacho.add_trace(go.Bar(x=estagios, y=y, name=nome, marker_color=cor))
