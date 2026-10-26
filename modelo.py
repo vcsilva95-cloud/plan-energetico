@@ -58,7 +58,7 @@ lista_ute=[]
 
 lista_ute.append(usina)
 
-usina={"Nome":"UTE_PecÃ©m_II",
+usina={"Nome":"UTE_Pecém_II",
        "Capac": 144.,
        "Custo":1764000.,}
 
